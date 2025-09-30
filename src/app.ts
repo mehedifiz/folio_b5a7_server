@@ -22,7 +22,7 @@ app.get("/", (_req, res) => {
   res.send("API is running");
 });
 
-// app.use("/api/user" , userRouter)
+app.use("/api/user" , userRouter)
 
 
 // 404 Handler

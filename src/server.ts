@@ -2,6 +2,7 @@ import http, { Server } from "http";
 import app from "./app";
 import dotenv from "dotenv";
 import { Prisma } from "./config/db";
+import { createAdmin } from "./config/adminMake";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ async function startServer() {
 
     await connectDB()
     server = http.createServer(app);
+    createAdmin()
     server.listen(process.env.PORT, () => {
       console.log(`🚀 Server is running on port ${process.env.PORT}`);
     });
