@@ -1,13 +1,14 @@
 -- CreateEnum
-CREATE TYPE "public"."Role" AS ENUM ('ADMIN');
+CREATE TYPE "Role" AS ENUM ('ADMIN');
 
 -- CreateTable
-CREATE TABLE "public"."User" (
+CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "userName" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" "public"."Role" NOT NULL DEFAULT 'ADMIN',
+    "role" "Role" NOT NULL DEFAULT 'ADMIN',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -15,21 +16,22 @@ CREATE TABLE "public"."User" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Post" (
+CREATE TABLE "Blog" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "summary" TEXT,
     "content" TEXT NOT NULL,
+    "image" TEXT,
     "published" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Blog_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "public"."Project" (
+CREATE TABLE "Project" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
@@ -45,10 +47,13 @@ CREATE TABLE "public"."Project" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
+CREATE UNIQUE INDEX "User_userName_key" ON "User"("userName");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Post_slug_key" ON "public"."Post"("slug");
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Project_slug_key" ON "public"."Project"("slug");
+CREATE UNIQUE INDEX "Blog_slug_key" ON "Blog"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Project_slug_key" ON "Project"("slug");

@@ -26,12 +26,13 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-model Post {
+model Blog {
   id        Int      @id @default(autoincrement())
   title     String
   slug      String   @unique
   summary   String?
-  content   String
+  content   String   // Rich text HTML from React Quill
+  image     String?  // Cover image URL
   published Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

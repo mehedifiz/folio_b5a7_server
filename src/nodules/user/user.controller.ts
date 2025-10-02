@@ -12,7 +12,7 @@ export const login = async (req: Request, res: Response) => {
   }
 
   const user = await Prisma.user.findFirst({
-    where: { name: username },
+    where: { userName: username },
   });
 
   if (!user) {
@@ -24,21 +24,33 @@ export const login = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Invalid username or password" });
   }
 
+  // Sign token
   const token = jwt.sign(
     {
       id: user.id,
       name: user.name,
       role: user.role,
     },
-     JWT_SECRET
+    JWT_SECRET,
+    { expiresIn: "7d" }
   );
 
+ res.cookie("auth", token, {
+  httpOnly: true,
+  secure: true,     
+  sameSite: "none", 
+});
+
+
+
+
+
+
   return res.status(200).json({
-    message: "Login successful ",
-    token,
+    message: "Login successful",
     user: {
       id: user.id,
-      username: user.userName,
+      userName: user.userName,
       name: user.name,
       role: user.role,
     },
