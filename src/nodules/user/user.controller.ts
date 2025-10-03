@@ -8,7 +8,9 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
   if (!username || !password) {
-    return res.status(400).json({ message: "Username and password are required" });
+    return res
+      .status(400)
+      .json({ message: "Username and password are required" });
   }
 
   const user = await Prisma.user.findFirst({
@@ -35,19 +37,15 @@ export const login = async (req: Request, res: Response) => {
     { expiresIn: "7d" }
   );
 
- res.cookie("auth", token, {
-  httpOnly: true,
-  secure: true,     
-  sameSite: "none", 
-});
-
-
-
-
-
+  //  res.cookie("auth", token, {
+  //   httpOnly: true,
+  //   secure: true,
+  //   sameSite: "none",
+  // });
 
   return res.status(200).json({
     message: "Login successful",
+    token,
     user: {
       id: user.id,
       userName: user.userName,
@@ -56,3 +54,17 @@ export const login = async (req: Request, res: Response) => {
     },
   });
 };
+
+
+export const logout = async (_req: Request, res: Response) => {
+  res.clearCookie("auth", {
+    httpOnly: true,
+    secure: true,
+      sameSite: "none",
+
+  }
+)
+
+return res.status(200).json({ message: "Logout successful" });
+
+}

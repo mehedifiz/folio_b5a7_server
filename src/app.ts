@@ -11,9 +11,12 @@ app.use(cookieParser());
  
 // Middleware
 app.use(cors({
-  origin: ["https://jhondon.vercel.app","http://localhost:3000"],
+  origin: ["https://jhondon.netlify.app", "http://localhost:3000"],
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
+
 
 app.use(compression());
 app.use(express.json());

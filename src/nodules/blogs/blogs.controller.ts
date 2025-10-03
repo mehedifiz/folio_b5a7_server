@@ -125,3 +125,47 @@ export const getBlog = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+export const updateBlog = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { title, summary, content, image, published } = req.body;
+
+  try {
+    // Check if blog exists
+    const blog = await Prisma.blog.findUnique({ where: { id: Number(id) } });
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    let slug = blog.slug;
+
+    if (title && title !== blog.title) {
+      slug = await generateUniqueSlug(title);
+
+      let slugExists = await Prisma.blog.findUnique({ where: { slug } });
+      let counter = 1;
+      while (slugExists) {
+        slug = `${slug}-${counter}`;
+        slugExists = await Prisma.blog.findUnique({ where: { slug } });
+        counter++;
+      }
+    }
+
+    const updatedBlog = await Prisma.blog.update({
+      where: { id: Number(id) },
+      data: {
+        title: title ?? blog.title,
+        slug,
+        summary: summary ?? blog.summary,
+        content: content ?? blog.content,
+        image: image ?? blog.image,
+        published: published ?? blog.published,
+      },
+    });
+
+    res.status(200).json(updatedBlog);
+  } catch (err: any) {
+    console.error("Error updating blog:", err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
