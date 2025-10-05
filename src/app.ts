@@ -4,6 +4,7 @@ import express from "express";
 import { userRouter } from "./nodules/user/user.routes";
 import cookieParser from "cookie-parser";
 import { blogRouter } from "./nodules/blogs/blogs.router";
+import { projectRouter } from "./nodules/project/project.router";
  
 const app = express();
 app.use(cookieParser());
@@ -28,6 +29,7 @@ app.get("/", (_req, res) => {
 
 app.use("/api/user", userRouter);
 app.use("/api/blog", blogRouter);
+app.use("/api/project", projectRouter);
 
 // 404 Handler
 app.use((req, res) => {

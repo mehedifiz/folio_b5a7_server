@@ -31,8 +31,8 @@ model Blog {
   title     String
   slug      String   @unique
   summary   String?
-  content   String   // Rich text HTML from React Quill
-  image     String?  // Cover image URL
+  content   String   
+  image     String?  
   published Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
